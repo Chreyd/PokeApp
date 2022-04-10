@@ -8,6 +8,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   useColorScheme,
   View,
 } from 'react-native';
@@ -19,24 +20,41 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import { listPoke } from '../../data/PokeList';
+import { ListPokeOriginal } from '../../data/PokemonList';
 import { Pokemon } from '../../models/Pokemon';
 
 
 const HomeView = () => {
 
-    const name = 'Pikatchu';
-    const level: number = 15;
-    const isMale:boolean = true;
+  const [counterPokedex, setCounterPokedex] = useState(0);
+  const [listPoke, setlistPoke] = useState(ListPokeOriginal);
 
-    const [counterPokedex, setCounterPokedex] = useState(0);
+  const getNamesPokemon= (namePoke:string)=>{
+    console.log(namePoke); 
+  } 
+
+  const modifiLevel= ()=>{
+    let newArray = [...listPoke];//copying the old datas array 
+    listPoke[counterPokedex].level = listPoke[counterPokedex].level + 5;
+    setlistPoke(newArray);
+  }
 
     const onNext= ()=>{
-      setCounterPokedex(counterPokedex + 1);
+      if(counterPokedex === ListPokeOriginal.length -1){
+        setCounterPokedex(0);
+      }
+      else{
+        setCounterPokedex(counterPokedex + 1);
+      }
+
     }
 
     const onPrev= ()=>{
-      setCounterPokedex(counterPokedex - 1);
+      if (counterPokedex === 0) {
+        setCounterPokedex(ListPokeOriginal.length -1 );
+      } else {
+        setCounterPokedex(counterPokedex - 1);
+      }
     }
  
   return (
@@ -51,21 +69,24 @@ const HomeView = () => {
         onPress={() => onPrev()}
         color="#f194ff"
       />
+      <PokeInfo name={ListPokeOriginal[counterPokedex].name} id= {ListPokeOriginal[counterPokedex].id} level={ListPokeOriginal[counterPokedex].level} isMale={ListPokeOriginal[counterPokedex].isMale}  source={ListPokeOriginal[counterPokedex].src} onClickPokemon={modifiLevel} />
 
-      <FlatList
+      {/* <FlatList
         data={listPoke}
         keyExtractor={item => item.id.toString()}
         renderItem={({item})=> 
           <PokeInfo name={item.name} id= {item.id} level={item.level} isMale={item.isMale}  source={item.src} />
       }
-      />
+      /> */}
     </View>
   );
 };
 
 
 
-const PokeInfo= ({name, level, isMale, source}: Pokemon)=>{
+const PokeInfo= ({name, level, isMale, source, onClickPokemon}: Pokemon)=>{
+
+
   return (
     <View>
       <Text>Bonjour tout le monde. ceci est ma page HomeView</Text>
@@ -74,7 +95,12 @@ const PokeInfo= ({name, level, isMale, source}: Pokemon)=>{
       </Text>
       {isMale ?
       <Text> et c'eest un male</Text> : <Text> et c'est une femelle</Text>}
-      <Image source={source} style={styles.imagePoke}/>
+      <TouchableOpacity
+        // style={styles.button}
+        onPress={()=>onClickPokemon()}
+      >
+        <Image source={source} style={styles.imagePoke}/>
+      </TouchableOpacity>
     </View>
   )
 }
