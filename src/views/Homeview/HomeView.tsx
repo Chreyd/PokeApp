@@ -59,7 +59,7 @@ const HomeView = () => {
  
   return (
     <View>
-      <Text>Valeur du counterPokedex:{ counterPokedex}</Text>
+      <Text>Valeur du counterPokedex: est{ counterPokedex}</Text>
       <Button
         title="Next"
         onPress={() => onNext()}
