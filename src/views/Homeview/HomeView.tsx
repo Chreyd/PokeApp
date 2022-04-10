@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
+  Button,
+  FlatList,
     Image,
   SafeAreaView,
   ScrollView,
@@ -17,6 +19,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { listPoke } from '../../data/PokeList';
+import { Pokemon } from '../../models/Pokemon';
 
 
 const HomeView = () => {
@@ -24,23 +28,44 @@ const HomeView = () => {
     const name = 'Pikatchu';
     const level: number = 15;
     const isMale:boolean = true;
+
+    const [counterPokedex, setCounterPokedex] = useState(0);
+
+    const onNext= ()=>{
+      setCounterPokedex(counterPokedex + 1);
+    }
+
+    const onPrev= ()=>{
+      setCounterPokedex(counterPokedex - 1);
+    }
  
   return (
     <View>
-      <PokeInfo name={name} level={level} isMale={isMale}  source={require('../../assets/pokemon_PNG146.png')}/>
-      <PokeInfo name="Richu" level={147} isMale={isMale} source={require('../../assets/pokemon_PNG147.png')}/>
+      <Text>Valeur du counterPokedex:{ counterPokedex}</Text>
+      <Button
+        title="Next"
+        onPress={() => onNext()}
+      />
+        <Button
+        title="Previous"
+        onPress={() => onPrev()}
+        color="#f194ff"
+      />
+
+      <FlatList
+        data={listPoke}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({item})=> 
+          <PokeInfo name={item.name} id= {item.id} level={item.level} isMale={item.isMale}  source={item.src} />
+      }
+      />
     </View>
   );
 };
 
-type PokeInfoType={
-  name: string;
-  level: number;
-  isMale: boolean;
-  source: any;
-};
 
-const PokeInfo= ({name, level, isMale, source}: PokeInfoType)=>{
+
+const PokeInfo= ({name, level, isMale, source}: Pokemon)=>{
   return (
     <View>
       <Text>Bonjour tout le monde. ceci est ma page HomeView</Text>
