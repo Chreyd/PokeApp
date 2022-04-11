@@ -27,6 +27,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import HomeView from './views/Homeview/HomeView';
+import TestView from './views/testView/TestView';
 
 
 
@@ -40,6 +41,7 @@ const App = () => {
   return (
     <>
       <HomeView/>
+      {/* <TestView/> */}
     </>
   );
 };
